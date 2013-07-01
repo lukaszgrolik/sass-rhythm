@@ -1,0 +1,162 @@
+/* Rhythm v0.9 | 01.07.2013 | lukaszgrolik.pl | MIT License */
+
+// "public"
+// =============================================================================
+
+// global variables
+// -----------------------------------------------------------------------------
+
+// returns a base line-height value (in pixels) initialized by rhythm-init mixin
+$rhythm: null;
+
+// functions
+// -----------------------------------------------------------------------------
+
+@function rhythm($__value: 1) {
+  @return $__value * $rhythm;
+}
+
+// mixins
+// -----------------------------------------------------------------------------
+
+@mixin rhythm-normalize {
+  font-size: $rhythm-base-font-size;
+  line-height: $rhythm-base-line-height;
+}
+
+// defines global variables and prepares a vertical rhythm to work
+@mixin rhythm-init($__font-size, $__line-height, $__modular-scale) {
+  $rhythm-base-font-size: $__font-size;
+  $rhythm-base-line-height: rhythm-convert-line-height-to-px($__line-height);
+  $rhythm-base-ratio: $rhythm-base-line-height / $rhythm-base-font-size;
+  $rhythm-modular-scale: rhythm-get-modular-scale($__modular-scale);
+
+  $rhythm: $rhythm-base-line-height;
+
+  @include rhythm-normalize;
+}
+
+// resizes a font and adjusts a line-height
+@mixin rhythm-text($__font-size, $__line-height: loose) {
+  font-size: rhythm-text-get-font-size($__font-size);
+  line-height: rhythm-text-get-line-height($__line-height);
+}
+
+// "private"
+// =============================================================================
+
+// global variables
+// -----------------------------------------------------------------------------
+
+$rhythm-base-font-size: null; 
+$rhythm-base-line-height: null;
+$rhythm-base-ratio: null;
+$rhythm-modular-scale: null;
+
+$rhythm-current-font-size-ratio: null;
+
+// functions
+// -----------------------------------------------------------------------------
+
+@function rhythm-convert-line-height-to-px($__line-height) {
+  $-line-height: null;
+
+  @if unitless($__line-height) {
+    $-line-height: $__line-height * $rhythm-base-font-size;
+  } @else if unit($__line-height) == em {
+    $-line-height: $__line-height / 1em * $rhythm-base-font-size;
+  } @else if unit($__line-height) == px {
+    $-line-height: $__line-height;
+  }
+
+  @return $-line-height;
+}
+
+@function rhythm-get-modular-scale($__modular-scale) {
+  $-modular-scale: null;
+
+  @if type-of($__modular-scale) == number {
+    $-modular-scale: $__modular-scale;
+  } @else if type-of($__modular-scale) == string {
+         @if $__modular-scale == 'minor second'   { $-modular-scale: 15/16 }
+    @else if $__modular-scale == 'major second'   { $-modular-scale: 8/9; }
+    @else if $__modular-scale == 'minor third'    { $-modular-scale: 5/6; }
+    @else if $__modular-scale == 'major third'    { $-modular-scale: 4/5; }
+    @else if $__modular-scale == 'perfect fourth' { $-modular-scale: 3/4; }
+    @else if $__modular-scale == 'aug. fourth' or
+             $__modular-scale == 'dim. fifth'     { $-modular-scale: 1/1.41421356237; } // 1:sqrt(2)
+    @else if $__modular-scale == 'perfect fifth'  { $-modular-scale: 2/3; }
+    @else if $__modular-scale == 'minor sixth'    { $-modular-scale: 5/8; }
+    @else if $__modular-scale == 'golden section' { $-modular-scale: 1/1.618; }
+    @else if $__modular-scale == 'major sixth'    { $-modular-scale: 3/5; }
+    @else if $__modular-scale == 'minor seventh'  { $-modular-scale: 9/16; }
+    @else if $__modular-scale == 'major seventh'  { $-modular-scale: 8/15; }
+    @else if $__modular-scale == 'octave'         { $-modular-scale: 1/2; }
+    @else if $__modular-scale == 'major tenth'    { $-modular-scale: 2/5; }
+    @else if $__modular-scale == 'major eleventh' { $-modular-scale: 3/8; }
+    @else if $__modular-scale == 'major twelfth'  { $-modular-scale: 1/3; }
+    @else if $__modular-scale == 'double octave'  { $-modular-scale: 1/4; }
+  } 
+
+  @return $-modular-scale;
+}
+
+@function rhythm-text-get-font-size($__value) {
+  $-font-size: null;
+  $-font-size-ratio: null;
+
+  @if unitless($__value) {
+    $-modular-scale: $rhythm-modular-scale;
+
+    @if $__value < 0 {
+      $-modular-scale: 1 / $-modular-scale;
+    }
+
+    $-scale: 1 / $-modular-scale;
+
+    $-font-size-ratio: power($-scale, abs($__value));
+    $-font-size: $rhythm-base-font-size * $-font-size-ratio;
+  } @else if unit($__value) == px {
+    $-font-size: $__value;
+    $-font-size-ratio: $__value / $rhythm-base-font-size;
+  }
+  
+  $rhythm-current-font-size-ratio: $-font-size-ratio;
+
+  @return $-font-size;
+}
+
+@function rhythm-text-get-line-height($__value) {
+  $-line-height: null;
+
+  @if $__value == loose or $__value == tight {
+    $-multiple-lines: null;
+
+    @if $__value == loose or
+        ($__value == tight and $rhythm-current-font-size-ratio < 1) {
+      $-multiple-lines: ceil($rhythm-current-font-size-ratio);
+    } @else if $__value == tight {
+      $-multiple-lines: floor($rhythm-current-font-size-ratio);
+    }
+
+    $-line-height: $rhythm-base-line-height * $-multiple-lines;
+  } @else if type-of($__value) == number and unitless($__value) {
+    $-line-height: rhythm($__value);
+  }
+
+  @return $-line-height;
+}
+
+// 
+// miscellaneous
+// 
+
+@function power($__base, $__exponent) {
+  $-result: 1;
+
+  @for $i from 0 to $__exponent {
+    $-result: $-result * $__base; 
+  }
+
+  @return $-result;
+}
