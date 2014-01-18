@@ -121,7 +121,7 @@ $rhythm-current-font-size-ratio: null;
     $-font-size-ratio: $__value / $rhythm-base-font-size;
   }
   
-  $rhythm-current-font-size-ratio: $-font-size-ratio;
+  $rhythm-current-font-size-ratio: $-font-size-ratio !global;
 
   @return $-font-size;
 }
