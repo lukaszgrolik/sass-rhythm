@@ -7,7 +7,7 @@
 // -----------------------------------------------------------------------------
 
 // returns a base line-height value (in pixels) initialized by rhythm-init mixin
-$rhythm: null;
+$rhythm: null !global;
 
 // functions
 // -----------------------------------------------------------------------------
@@ -48,12 +48,12 @@ $rhythm: null;
 // global variables
 // -----------------------------------------------------------------------------
 
-$rhythm-base-font-size: null;
-$rhythm-base-line-height: null;
-$rhythm-base-ratio: null;
-$rhythm-modular-scale: null;
+$rhythm-base-font-size: null !global;
+$rhythm-base-line-height: null !global;
+$rhythm-base-ratio: null !global;
+$rhythm-modular-scale: null !global;
 
-$rhythm-current-font-size-ratio: null;
+$rhythm-current-font-size-ratio: null !global;
 
 // functions
 // -----------------------------------------------------------------------------
