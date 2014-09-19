@@ -1,0 +1,8 @@
+{
+  "name": "sass-rhythm",
+  "version": "0.1.4",
+  "main": "_rhythm.scss",
+  "description": "Simplifies composing a vertical rhythm",
+  "keywords": ["rhythm", "sass-rhythm", "vertical-rhythm"],
+  "license": "MIT"
+}
