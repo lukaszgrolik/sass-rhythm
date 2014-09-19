@@ -6,16 +6,21 @@ Sass-rhythm is a [Sass](https://github.com/nex3/sass) based tool that simplifies
 
 Sass 3.2.0+
 
+## Installation
+
+### Bower:
+
+- Terminal: `bower install sass-rhythm`
+- SCSS: `@import 'path/to/bower_components/sass-rhythm/rhythm';`
+
+### Vanilla Sass
+
+- Copy `_rhythm.scss` into your project
+- SCSS: `@import 'path/to/rhythm';`
+
 ## Getting started
 
-1. Download & put the `_rhythm.scss` partial wherever you want in your project.
-2. Import:
-
-   ```scss
-   @import 'path/to/rhythm';
-   ```
-
-3. Set a base typography:
+1. Set a base typography:
 
    ```scss
    html {
@@ -23,8 +28,8 @@ Sass 3.2.0+
    }
    ```
 
-4. Change a `font-size` and adjust a `line-height`:
-  
+2. Change a `font-size` and adjust a `line-height`:
+
    ```scss
    // increases paragraph's font-size by 2 levels regarding to the chosen scale
    // and automatically adjusts its line-height
@@ -33,7 +38,7 @@ Sass 3.2.0+
    }
    ```
 
-5. Change border-widths, margins, heights etc. in respect of the previously initialized typography:
+3. Change border-widths, margins, heights etc. in respect of the previously initialized typography:
 
    ```scss
    // sets a "padding-left" property to "5 * current line-height"
