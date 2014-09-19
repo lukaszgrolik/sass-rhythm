@@ -1,6 +1,6 @@
 {
   "name": "sass-rhythm",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "_rhythm.scss",
   "description": "Simplifies composing a vertical rhythm",
   "keywords": ["rhythm", "sass-rhythm", "vertical-rhythm"],
