@@ -8,7 +8,7 @@ Sass 3.2.0+
 
 ## Installation
 
-### Bower:
+### Bower
 
 - Terminal: `bower install sass-rhythm`
 - SCSS: `@import 'path/to/bower_components/sass-rhythm/rhythm';`
